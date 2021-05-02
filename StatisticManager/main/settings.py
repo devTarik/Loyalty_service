@@ -115,7 +115,7 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_IMPORTS = ("celery_app.tasks", )
 
-CELERY_BEAT_SCHEDULE = {   # my task
+CELERY_BEAT_SCHEDULE = {   # my tasks
      'all_balance': {
          'task': 'celery_app.tasks.all_balance',
          'schedule': crontab()  # execute every minute
@@ -124,9 +124,8 @@ CELERY_BEAT_SCHEDULE = {   # my task
 
 #  ClickHouse settings
 CLICKHOUSE_DATABASES = {
-    # Connection name to refer in using(...) method 
     'default': {
-        'db_name': 'statistics_db',       # need CREATE DATABASE statistics_db;
+        'db_name': 'statistics_db',   # need CREATE DATABASE statistics_db;
         'username': 'default',
         'password': '135795'
     }

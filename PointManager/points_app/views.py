@@ -43,12 +43,10 @@ class NewOperation (APIView):
                 req_point = request.data.get('points')
                 get_client = Client.objects.filter(id=req_client, user=request.user).first()
                 if req_act == True:
-                    get_client_points = get_client.points
-                    get_client.points = get_client_points + req_point
+                    get_client.points +=  req_point
                 elif req_act == False:
-                    get_client_points = get_client.points
-                    if req_point <=get_client_points:
-                        get_client.points = get_client_points - req_point
+                    if req_point <= get_client.pointss:
+                        get_client.points -= req_point
                     else:
                         return Response('Not enough points', status=status.HTTP_406_NOT_ACCEPTABLE)
                 get_client.save()
@@ -82,14 +80,14 @@ class OperationDetail (generics.RetrieveUpdateDestroyAPIView):
 
 # for Celery
 class NopermitionClientAll (generics.ListAPIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.AllowAny]   # request without Token
 
     serializer_class = ClientListSerializers
     queryset = Client.objects.all()
         
 # for Celery
 class NopermitionClientDetail (generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.AllowAny]   # request without Token
 
     serializer_class = ClientListSerializers
     queryset = Client.objects.all()
