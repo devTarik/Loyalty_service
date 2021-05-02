@@ -123,38 +123,38 @@ CELERY_BEAT_SCHEDULE = {   # my task
 }
 
 #  ClickHouse settings
-# CLICKHOUSE_DATABASES = {
-#     # Connection name to refer in using(...) method 
-#     'default': {
-#         'db_name': 'statistics_db',       # need CREATE DATABASE statistics_db;
-#         'username': 'default',
-#         'password': '135795'
-#     }
-# }
+CLICKHOUSE_DATABASES = {
+    # Connection name to refer in using(...) method 
+    'default': {
+        'db_name': 'statistics_db',       # need CREATE DATABASE statistics_db;
+        'username': 'default',
+        'password': '135795'
+    }
+}
 
-# from django_clickhouse.database import connections
-# db = connections['default']
-# db_link = connections['default'] 
+from django_clickhouse.database import connections
+db = connections['default']
+db_link = connections['default'] 
 
 
-# CLICKHOUSE_REDIS_CONFIG = {
-#     'host': '127.0.0.1',
-#     'port': 6379,
-#     'db': 8,
-#     'socket_timeout': 10
-# }
+CLICKHOUSE_REDIS_CONFIG = {
+    'host': '127.0.0.1',
+    'port': 6379,
+    'db': 8,
+    'socket_timeout': 10
+}
 
-# CLICKHOUSE_CELERY_QUEUE = 'clickhouse'
+CLICKHOUSE_CELERY_QUEUE = 'clickhouse'
 
-# # If you have no any celerybeat tasks, define a new dictionary
-# # More info: http://docs.celeryproject.org/en/v2.3.3/userguide/periodic-tasks.html
-# from datetime import timedelta
-# CELERYBEAT_SCHEDULE = {
-#     'clickhouse_auto_sync': {
-#         'task': 'django_clickhouse.tasks.clickhouse_auto_sync',
-#         'schedule': timedelta(seconds=2),  # Every 2 seconds
-#         'options': {'expires': 1, 'queue': CLICKHOUSE_CELERY_QUEUE}
-#     }
-# }
+# If you have no any celerybeat tasks, define a new dictionary
+# More info: http://docs.celeryproject.org/en/v2.3.3/userguide/periodic-tasks.html
+from datetime import timedelta
+CELERYBEAT_SCHEDULE = {
+    'clickhouse_auto_sync': {
+        'task': 'django_clickhouse.tasks.clickhouse_auto_sync',
+        'schedule': timedelta(seconds=2),  # Every 2 seconds
+        'options': {'expires': 1, 'queue': CLICKHOUSE_CELERY_QUEUE}
+    }
+}
 
 

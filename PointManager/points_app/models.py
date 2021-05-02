@@ -12,6 +12,6 @@ class Client(models.Model):
 class Operations(models.Model):
     client = models.ForeignKey(Client, verbose_name='Client', on_delete = models.CASCADE)
     descript = models.CharField(verbose_name='Descript', max_length=100, null=True)
-    act = models.BooleanField(verbose_name='Act') # True = add point, False = subtract points
+    act = models.BooleanField(verbose_name='Act') # True = add points, False = subtract points
     points = models.IntegerField(verbose_name='Points')
     date = models.DateTimeField(verbose_name='Date', auto_now_add=True)
