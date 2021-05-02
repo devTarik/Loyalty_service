@@ -60,11 +60,11 @@ ___
 > *Create new operation* 
 >> `https://localhost:8000/api/v1/points/operations/create (POST)`
 
-```
+```jsonc
 {
-  "client": 1,   # id client
-  "act": true,   # true = add points, false = subtract points
-  "descript": "some descript",   # field may be missing 
+  "client": 1,   // id client
+  "act": true,   // true = add points, false = subtract points
+  "descript": "some descript",   // field may be missing 
   "points": 0,
 }
 ```
