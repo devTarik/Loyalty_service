@@ -1,0 +1,9 @@
+celery
+clickhouse-driver
+Django
+django-clickhouse
+djangorestframework
+djoser
+psycopg2-binary
+redis
+requests
