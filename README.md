@@ -60,7 +60,7 @@ ___
 > *Create new operation* 
 >> `https://localhost:8000/api/v1/points/operations/create (POST)`
 
-```json
+```
 {
   "client": 1,   # id client
   "act": true,   # true = add points, false = subtract points
