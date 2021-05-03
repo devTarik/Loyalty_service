@@ -1,9 +1,8 @@
-___
 ### **PointManager** app for accumulation of points for the loyalty program
-___
+
 
 ### **StatisticManager** Celery application for collect statistics and save to ClickHouse databases
-___
+
 
 ## RUN
 
@@ -16,7 +15,6 @@ ___
 
 * Celery Periodic Tasks need run on the root dir **StatisticsManager** with command `celery -A main beat -l info`
 
-___
 ## Example request
 
 > *Create user*
