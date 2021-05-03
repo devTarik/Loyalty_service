@@ -17,7 +17,7 @@ ___
 ## Example request
 
 > *Create user*
->> `https://localhost:8000/auth/users/  (POST)`
+>> `http://localhost:8000/auth/users/  (POST)`
 
 ```json
 {
@@ -28,7 +28,7 @@ ___
 ```
 ___
 > *Get Token*
->> `https://localhost:8000/auth/token/login (POST)`
+>> `http://localhost:8000/auth/token/login (POST)`
 
 ```json
 {
@@ -38,36 +38,36 @@ ___
 ```
 ___
 > *Create new client* 
->> `https://localhost:8000/api/v1/points/client/create (POST)`
+>> `http://localhost:8000/api/v1/points/client/create (POST)`
 >>> *example* `Headers {Authorization: "Token ..."}`
 
 ```json
 {
   "name": "Client_1",
-  "point": 0,
+  "points": 0,
 }
 ```
 ---
 > *Get list all clients*
->> `https://localhost:8000/api/v1/points/client/list (GET)`
+>> `http://localhost:8000/api/v1/points/client/list (GET)`
 ```
 {}
 ```
 ___
 > *Create new operation* 
->> `https://localhost:8000/api/v1/points/operations/create (POST)`
+>> `http://localhost:8000/api/v1/points/operations/create (POST)`
 
 ```jsonc
 {
   "client": 1,   // id client
   "act": true,   // true = add points, false = subtract points
-  "descript": "some descript",   // field may be missing 
-  "points": 0,
+  "descript": "add 100 points",   // field may be missing 
+  "points": 100,
 }
 ```
 ___
 > *Get list all operation* 
->> `https://localhost:8000/api/v1/points/operations/list (GET)`
+>> `http://localhost:8000/api/v1/points/operations/list (GET)`
 
 ```json
 {}
