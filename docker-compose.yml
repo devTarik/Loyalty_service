@@ -1,0 +1,137 @@
+version: "3.9"
+
+services:
+
+  postgres_db:
+    build:
+      context: .
+      dockerfile: ./compose/postgres/Dockerfile
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5433:5432'
+    volumes:
+      - ./db_vol/postgres:/var/lib/postgresql/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024k"
+        max-file: "5"
+    healthcheck:
+        test: ["CMD", "psql -h localhost -p 5432 -d point_manager -U postgres"]
+        interval: 5s
+        timeout: 10s
+        retries: 5
+
+  redis:
+    image: redis
+    restart: always
+    container_name: 'app_redis'
+    command: redis-server
+    ports:
+      - '6379:6379'
+    volumes:
+      - ./db_vol/redis:/data
+
+  clickhouse_server:
+    build:
+      context: .
+      dockerfile: ./compose/clickhouse/Dockerfile
+    ports:
+      - '8123:8123'
+      - '9000:9000'
+    volumes:
+      - ./db_vol/clickhouse:/var/lib/clickhouse
+
+  point_app:
+    build:
+      context: .
+      dockerfile: ./PointManager/Dockerfile
+    command: >
+      bash -c "python manage.py migrate &&
+        python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./PointManager:/code
+    ports:
+      - '8000:8000'
+    depends_on:
+      - postgres_db
+      - statistics_app
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024k"
+        max-file: "5"
+    healthcheck:
+        test: ["CMD", "python manage.py migrate"]
+        interval: 5s
+        timeout: 10s
+        retries: 5
+
+  statistics_app:
+    build:
+      context: .
+      dockerfile: ./StatisticManager/Dockerfile
+    command: >
+      bash -c "python manage.py migrate &&
+        python manage.py runserver 0.0.0.0:8081"
+    volumes:
+      - ./StatisticManager:/code
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+      - clickhouse_server
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024k"
+        max-file: "5"
+    healthcheck:
+        test: ["CMD", "python manage.py migrate"]
+        interval: 5s
+        timeout: 10s
+        retries: 5
+  
+  celery_worker:
+    build:
+      context: .
+      dockerfile: ./compose/celery/Dockerfile
+    command: sh -c "wait-for statistics_app:8081 -- celery -A main worker -l info"
+    container_name: celery_worker
+    volumes:
+      - ./StatisticManager:/code
+    depends_on:
+      - statistics_app
+      - clickhouse_server
+      - redis
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 50M
+        reservations:
+          cpus: '0.25'
+          memory: 20M
+    hostname: celery_worker
+    restart: on-failure
+
+  celery_beat:
+    build:
+      context: .
+      dockerfile: ./compose/celery/Dockerfile
+    command: sh -c "wait-for statistics_app:8081 -- celery -A main beat -l info"
+    container_name: celery_beat
+    volumes:
+      - ./StatisticManager:/code
+    depends_on:
+      - statistics_app
+      - clickhouse_server
+      - redis
+    hostname: celery_beat
+    restart: on-failure
