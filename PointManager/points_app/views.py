@@ -35,28 +35,26 @@ class ClientDetail (generics.RetrieveUpdateDestroyAPIView):
 class NewOperation (APIView):
 
     def post(self, request):
-        serializer = OperationsSerializers(data=request.data)
         try:
-            if serializer.is_valid():
-                req_client = request.data.get('client')
-                req_act = bool(request.data.get('act'))
-                req_point = request.data.get('points')
-                get_client = Client.objects.filter(id=req_client, user=request.user).first()
-                if req_act == True:
-                    get_client.points +=  req_point
-                elif req_act == False:
-                    if req_point <= get_client.pointss:
-                        get_client.points -= req_point
-                    else:
-                        return Response('Not enough points', status=status.HTTP_406_NOT_ACCEPTABLE)
-                get_client.save()
-                serializer.save()
-                try: # send request to Celery for run task 'control_balance'
-                    requests.get(f'http://127.0.0.1:8081/new_operation/?client_id={req_client}')
-                finally:
-                    return Response('OK', status=status.HTTP_201_CREATED)
-            else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            serializer = OperationsSerializers(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            req_client = serializer.validated_data.get('client')
+            req_act = serializer.validated_data.get('act')
+            req_point = serializer.validated_data.get('points')
+            get_client = Client.objects.filter(id=req_client.id, user=request.user).first()
+            if req_act:
+                get_client.points += req_point
+            elif not req_act:
+                if req_point <= get_client.points:
+                    get_client.points -= req_point
+                else:
+                    return Response('Not enough points', status=status.HTTP_400_BAD_REQUEST)
+            get_client.save()
+            serializer.save()
+            try: # send request to Celery for run task 'control_balance'
+                requests.get(f'http://127.0.0.1:8081/new_operation/?client_id={req_client}')
+            finally:
+                return Response('OK', status=status.HTTP_201_CREATED)
         except:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

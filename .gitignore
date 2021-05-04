@@ -6,3 +6,4 @@ __pycache__
 linux.code-workspace
 docker-compose.yml
 celerybeat-schedule
+db_vol
