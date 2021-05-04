@@ -82,7 +82,7 @@ DATABASES = {
         'NAME': 'point_manager',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'localhost',
+        'HOST': 'postgres_db',
         'PORT': 5432,
     }
 }

@@ -5,7 +5,7 @@ import requests
 
 def balance():
     try:
-        response = requests.get('http://127.0.0.1:8000/api/v1/points/nopermition/all/').json()
+        response = requests.get("http://localhost:8000/api/v1/points/nopermition/all/").json()
         point = 0
         for item in response:
             point += item['points']
@@ -20,7 +20,7 @@ def balance():
 
 def control_balance(client_id):
     try:
-        response = requests.get(f'http://127.0.0.1:8000/api/v1/points/nopermition/detail/{client_id}').json()
+        response = requests.get(f"http://localhost:8000/api/v1/points/nopermition/detail/{client_id}").json()
         if response['points'] >= 1000 or response['points'] == 0:
             print (f"""ID = {str(response['id'])}\
                     \nName = {str(response['name'])}\

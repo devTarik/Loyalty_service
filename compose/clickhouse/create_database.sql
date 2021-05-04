@@ -1,0 +1,1 @@
+CREATE DATABASE statistics_db;

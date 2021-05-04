@@ -1,0 +1,3 @@
+FROM celery
+
+WORKDIR /code

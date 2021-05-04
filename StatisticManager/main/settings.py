@@ -105,7 +105,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # Celery settings
-REDIS_HOST = 'localhost'
+REDIS_HOST = 'redis'
 REDIS_PORT = '6379'
 CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
 CELERY_BROKER_TRANSPORT_OPTIONS = {'visible_timeout': 3600}
@@ -125,9 +125,10 @@ CELERY_BEAT_SCHEDULE = {   # my tasks
 #  ClickHouse settings
 CLICKHOUSE_DATABASES = {
     'default': {
+        'db_url' : 'http://clickhouse_server:8123/',
         'db_name': 'statistics_db',   # need CREATE DATABASE statistics_db;
         'username': 'default',
-        'password': '135795'
+        'password': ''
     }
 }
 
@@ -137,7 +138,7 @@ db_link = connections['default']
 
 
 CLICKHOUSE_REDIS_CONFIG = {
-    'host': '127.0.0.1',
+    'host': 'redis',
     'port': 6379,
     'db': 8,
     'socket_timeout': 10
