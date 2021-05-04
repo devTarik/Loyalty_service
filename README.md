@@ -23,17 +23,17 @@ ___
 {
   "email": "test@gmail.com",
   "username": "test_user",
-  "password": "test123Pass",
+  "password": "test123Pass"
 }
 ```
 ___
 > *Get Token*
->> `http://localhost:8000/auth/token/login (POST)`
+>> `http://localhost:8000/auth/token/login/ (POST)`
 
 ```json
 {
   "username": "test_user",
-  "password": "test123Pass",
+  "password": "test123Pass"
 }
 ```
 ___
@@ -44,30 +44,30 @@ ___
 ```json
 {
   "name": "Client_1",
-  "points": 0,
+  "points": 0
 }
 ```
 ---
 > *Get list all clients*
->> `http://localhost:8000/api/v1/points/client/list (GET)`
+>> `http://localhost:8000/api/v1/points/client/list/ (GET)`
 ```
 {}
 ```
 ___
 > *Create new operation* 
->> `http://localhost:8000/api/v1/points/operations/create (POST)`
+>> `http://localhost:8000/api/v1/points/operations/create/ (POST)`
 
 ```jsonc
 {
   "client": 1,   // id client
   "act": true,   // true = add points, false = subtract points
   "descript": "add 100 points",   // field may be missing 
-  "points": 100,
+  "points": 100
 }
 ```
 ___
 > *Get list all operation* 
->> `http://localhost:8000/api/v1/points/operations/list (GET)`
+>> `http://localhost:8000/api/v1/points/operations/list/ (GET)`
 
 ```json
 {}
